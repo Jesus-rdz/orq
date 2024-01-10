@@ -10,5 +10,5 @@ import java.sql.SQLException;
 @Service
 public interface appService {
     xmlResultadoMedicamento consultaMedicamento(xmlConsultaMedicamento xmlConsultaMedicamento) throws SQLException;
-    RuteoDto  obtenerDatosConexion(String clavePresupuestalOrigen, String clavePresupuestalFarmacia);
+//    RuteoDto  obtenerDatosConexion(String clavePresupuestalOrigen, String clavePresupuestalFarmacia);
 }

@@ -1,4 +1,4 @@
-package gob.imss.necesaif.integration;
+package gob.imss.necesaif.integration.constants;
 
 public interface Constantes {
     /* Errores generales
