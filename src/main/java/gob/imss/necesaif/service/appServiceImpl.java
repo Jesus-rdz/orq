@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -71,18 +70,20 @@ public class appServiceImpl implements appService {
                     detalle[iLenght].setUnidadMedida(rs.getString("UNI_MED"));
                     detalle[iLenght].setTipoPresentacion(rs.getString("TIPO_PRES"));
                     detalle[iLenght].setCantidadPresentacion(rs.getFloat("CANT_PRES"));
-                    detalle[iLenght].setConcentracion(rs.getString("CONCENTRACION"));
-                    //detalle[iLenght].setNivelInventario(rs.getString("NIVELSERVICIO"));
-                    detalle[iLenght].setNivelInventario(rs.getString("INV_DISP"));
+                    detalle[iLenght].setConcentracion(rs.getInt("CONCENTRACION"));
+                    detalle[iLenght].setNivelServicio(rs.getInt("NIVELSERVICIO"));
                     detalle[iLenght].setDescArticulo(rs.getString("DESCRIPCION"));
+                    detalle[iLenght].setInventarioDisponible(rs.getInt("INV_DISP"));
                     detalle[iLenght].setPresRazonada(rs.getInt("PRES_RAZONADA"));
-                    /*falta IC_MEDICAMENTO_GEN*/
+                    detalle[iLenght].setMedicamentoGen(rs.getInt("IC_MEDICAMENTO_GEN"));
                 }
+
                 /*validacion de detalle*/
                 if (detalle.length == 0) {
                     resultadoMedicamento.setEstatus(Constantes.NOHAYDATOS[0]);
                     resultadoMedicamento.setMensaje(Constantes.NOHAYDATOS[1]);
                 } else {
+                    resultadoMedicamento.setClavePresupuestal(input.getClasificacionPresupuestalFarmacia());
                     detalles_art.setDetalles(detalle);
                     resultadoMedicamento.setDetalles_art(detalles_art);
                     resultadoMedicamento.setEstatus(Constantes.PROC_EXITO[0]);

@@ -25,7 +25,7 @@ public class MedicamentosController {
         return "ok";
     }
 
-    @PostMapping(value="/consultaMedicamento", consumes={MediaType.APPLICATION_XML_VALUE}, produces="application/json")
+    @PostMapping(value="/consultaMedicamento", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
     public xmlResultadoMedicamento medicamentos(@RequestBody xmlConsultaMedicamento ConsultaMedicamento) throws SQLException {
         return servicio.consultaMedicamento(ConsultaMedicamento);
     }

@@ -1,7 +1,9 @@
 package gob.imss.necesaif.model;
 
+import javax.xml.bind.annotation.XmlAttribute;
+
 public class xmlConsultaMedicamento {
-	
+	@XmlAttribute(name="clasificacion-presupuestal-farmacia")
 	private String clasificacionPresupuestalFarmacia; 
 	private String clasificacionPresupuestalSolicitante;
 	private String descripcionArticulo;

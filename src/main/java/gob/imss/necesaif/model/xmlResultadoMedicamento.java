@@ -2,16 +2,16 @@ package gob.imss.necesaif.model;
 
 public class xmlResultadoMedicamento {
 
-    private String clasificacionPresupuestal;
 	private String estatus;
 	private String mensaje;
+    private String clavePresupuestal;
 	private Detalles_Art detalles_art;
 
-	public String getClasificacionPresupuestal() {
-		return clasificacionPresupuestal;
+	public String getClavePresupuestal() {
+		return clavePresupuestal;
 	}
-	public void setClasificacionPresupuestal(String clasificacionPresupuestal) {
-		this.clasificacionPresupuestal = clasificacionPresupuestal;
+	public void setClavePresupuestal(String clavePresupuestal) {
+		this.clavePresupuestal = clavePresupuestal;
 	}
 	public Detalles_Art getDetalles_art() {
 		return detalles_art;

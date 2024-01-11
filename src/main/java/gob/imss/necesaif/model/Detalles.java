@@ -12,11 +12,12 @@ public class Detalles {
 	private String unidadMedida;
 	private String tipoPresentacion;
 	private float cantidadPresentacion;
-	private String concentracion;
+	private int concentracion; //int
+	private int nivelServicio; //int
 	private String descArticulo;
-	private int presRazonada;
-	private String nivelInventario;
-	private int medicamentoGen;
+	private int inventarioDisponible; //int
+	private int presRazonada; //int
+	private int medicamentoGen; //int
 
     public String getGpo() {
         return gpo;
@@ -75,13 +76,11 @@ public class Detalles {
     public float getCantidadPresentacion() {
         return cantidadPresentacion;
     }
-    public void setCantidadPresentacion(float cantidadPresentacion) {
-        this.cantidadPresentacion = cantidadPresentacion;
-    }
-    public String getConcentracion() {
+    public void setCantidadPresentacion(float cantidadPresentacion) { this.cantidadPresentacion = cantidadPresentacion; }
+    public int getConcentracion() {
         return concentracion;
     }
-    public void setConcentracion(String concentracion) {
+    public void setConcentracion(int concentracion) {
         this.concentracion = concentracion;
     }
     public String getDescArticulo() {
@@ -90,18 +89,18 @@ public class Detalles {
     public void setDescArticulo(String descArticulo) {
         this.descArticulo = descArticulo;
     }
+    public int getInventarioDisponible() { return inventarioDisponible; }
+    public void setInventarioDisponible(int inventarioDisponible) { this.inventarioDisponible = inventarioDisponible; }
     public int getPresRazonada() {
         return presRazonada;
     }
     public void setPresRazonada(int presRazonada) {
         this.presRazonada = presRazonada;
     }
-    public String getNivelInventario() {
-        return nivelInventario;
+    public int getNivelServicio() {
+        return nivelServicio;
     }
-    public void setNivelInventario(String nivelInventario) {
-        this.nivelInventario = nivelInventario;
-    }
+    public void setNivelServicio(int nivelServicio) { this.nivelServicio = nivelServicio; }
     public int getMedicamentoGen() {
         return medicamentoGen;
     }
