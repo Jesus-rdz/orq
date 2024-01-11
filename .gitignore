@@ -65,3 +65,5 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+.project
+.vscode/settings.json
