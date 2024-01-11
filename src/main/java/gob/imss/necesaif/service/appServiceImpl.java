@@ -6,10 +6,12 @@ import gob.imss.necesaif.model.*;
 import gob.imss.necesaif.utils.utilityArray;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Service;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -30,6 +32,16 @@ public class appServiceImpl implements appService {
         try {
             farmaciaLocal = daoRuteo.obtenerDatosConexion(input.getClasificacionPresupuestalSolicitante(), input.getClasificacionPresupuestalFarmacia());
             //Conexion a la nueva local
+            
+            DriverManagerDataSource dataSource = new DriverManagerDataSource();
+            dataSource.setDriverClassName(farmaciaLocal.getDriverClass());
+            dataSource.setUrl(farmaciaLocal.getUrl());
+            dataSource.setUsername(farmaciaLocal.getUsername());
+            dataSource.setPassword(farmaciaLocal.getPassword());
+            
+            con = dataSource.getConnection();
+
+
 
             logger.info("Conexion realizada a Farmacia local: " + farmaciaLocal.getUrl());
             if(farmaciaLocal != null) {
