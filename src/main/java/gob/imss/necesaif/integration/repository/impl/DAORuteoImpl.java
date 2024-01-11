@@ -28,25 +28,22 @@ public class DAORuteoImpl implements DAORuteo {
     @Override
     public RuteoDto obtenerDatosConexion(String clavePresupuestalOrigen, String clavePresupuestalFarmacia) {
         RuteoDto ruteo = null;
-        try{
-            ruteo = (RuteoDto) jdbcTemplate.queryForObject(
+        try {
+            ruteo = jdbcTemplate.queryForObject(
                     SQLConstants.QS_RUTEO_FARMACIA, new Object[]{clavePresupuestalOrigen, clavePresupuestalFarmacia},
-                    new RowMapper(){
-                        public Object mapRow(ResultSet res, int rowNum)
-                                throws SQLException {
-                            RuteoDto ruteo = new RuteoDto();
-                            ruteo.setId(res.getInt("ID"));
-                            ruteo.setVersion(res.getInt("VERSION"));
-                            ruteo.setUsername(res.getString("USERNAME"));
-                            ruteo.setClavePresupuestalOrigen(res.getString("CLAVE_PRESUPUESTAL_ORIGEN"));
-                            ruteo.setDriverClass(res.getString("DRIVER_CLASS"));
-                            ruteo.setClavePresupuestalFarmacia(res.getString("CLAVE_PRESUPUESTAL_FARMACIA"));
-                            ruteo.setPassword(res.getString("PASSWORD"));
-                            ruteo.setUrl(res.getString("URL"));
-                            return ruteo;
-                        }
+                    (res, rowNum) -> {
+                        RuteoDto ruteoDto = new RuteoDto();
+                        ruteoDto.setId(res.getInt("ID"));
+                        ruteoDto.setVersion(res.getInt("VERSION"));
+                        ruteoDto.setUsername(res.getString("USERNAME"));
+                        ruteoDto.setClavePresupuestalOrigen(res.getString("CLAVE_PRESUPUESTAL_ORIGEN"));
+                        ruteoDto.setDriverClass(res.getString("DRIVER_CLASS"));
+                        ruteoDto.setClavePresupuestalFarmacia(res.getString("CLAVE_PRESUPUESTAL_FARMACIA"));
+                        ruteoDto.setPassword(res.getString("PASSWORD"));
+                        ruteoDto.setUrl(res.getString("URL"));
+                        return ruteoDto;
                     });
-        }catch(IncorrectResultSizeDataAccessException exp){
+        } catch (IncorrectResultSizeDataAccessException exp) {
             logger.debug("Conexi�n no encontrada. " + exp.getMessage());
         }
         logger.info(ruteo.getUrl());
