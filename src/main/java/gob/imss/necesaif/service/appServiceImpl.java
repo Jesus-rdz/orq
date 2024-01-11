@@ -90,35 +90,5 @@ public class appServiceImpl implements appService {
         return resultadoMedicamento;
     }
 
-//    @Override
-//    public RuteoDto obtenerDatosConexion(String clavePresupuestalOrigen, String clavePresupuestalFarmacia) {
-//        String sql = "SELECT ID, VERSION, USERNAME, CLAVE_PRESUPUESTAL_ORIGEN, " +
-//                "DRIVER_CLASS, CLAVE_PRESUPUESTAL_FARMACIA, PASSWORD, URL " +
-//                "FROM RUTEO " +
-//                "WHERE CLAVE_PRESUPUESTAL_ORIGEN = ?" +
-//                "AND CLAVE_PRESUPUESTAL_FARMACIA = ?";
-//        RuteoDto ruteo = null;
-//        try{
-//            ruteo = (RuteoDto) this.getJdbcTemplate().queryForObject(
-//                    sql, new Object[]{clavePresupuestalOrigen, clavePresupuestalFarmacia},
-//                    new RowMapper(){
-//                        public Object mapRow(ResultSet res, int rowNum)
-//                                throws SQLException {
-//                            RuteoDto ruteo = new RuteoDto();
-//                            ruteo.setId(res.getInt("ID"));
-//                            ruteo.setVersion(res.getInt("VERSION"));
-//                            ruteo.setUsername(res.getString("USERNAME"));
-//                            ruteo.setClavePresupuestalOrigen(res.getString("CLAVE_PRESUPUESTAL_ORIGEN"));
-//                            ruteo.setDriverClass(res.getString("DRIVER_CLASS"));
-//                            ruteo.setClavePresupuestalFarmacia(res.getString("CLAVE_PRESUPUESTAL_FARMACIA"));
-//                            ruteo.setPassword(res.getString("PASSWORD"));
-//                            ruteo.setUrl(res.getString("URL"));
-//                            return ruteo;
-//                        }
-//                    });
-//        }catch(IncorrectResultSizeDataAccessException exp){
-//            logger.debug("Conexi�n no encontrada. " + exp.getMessage());
-//        }
-//        return ruteo;
-//    }
+
 }
