@@ -5,6 +5,7 @@ import gob.imss.necesaif.model.xmlResultadoMedicamento;
 import gob.imss.necesaif.service.appService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -24,7 +25,7 @@ public class MedicamentosController {
         return "ok";
     }
 
-    @PostMapping(value="/consultaMedicamento", consumes="application/json", produces="application/json")
+    @PostMapping(value="/consultaMedicamento", consumes={MediaType.APPLICATION_XML_VALUE}, produces="application/json")
     public xmlResultadoMedicamento medicamentos(@RequestBody xmlConsultaMedicamento ConsultaMedicamento) throws SQLException {
         return servicio.consultaMedicamento(ConsultaMedicamento);
     }
