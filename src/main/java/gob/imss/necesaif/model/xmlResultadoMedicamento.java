@@ -1,11 +1,17 @@
 package gob.imss.necesaif.model;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
 public class xmlResultadoMedicamento {
 
-	private String estatus;
-	private String mensaje;
+	@JacksonXmlProperty
+    private String estatus;
+	@JacksonXmlProperty
+    private String mensaje;
+    @JacksonXmlProperty
     private String clavePresupuestal;
-	private Detalles_Art detalles_art;
+	@JacksonXmlProperty
+    private Detalles_Art detalles_art;
 
 	public String getClavePresupuestal() {
 		return clavePresupuestal;

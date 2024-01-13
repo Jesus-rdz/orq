@@ -9,6 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/api")
@@ -29,5 +32,13 @@ public class MedicamentosController {
     public xmlResultadoMedicamento medicamentos(@RequestBody xmlConsultaMedicamento ConsultaMedicamento) throws SQLException {
         return servicio.consultaMedicamento(ConsultaMedicamento);
     }
+
+    @PostMapping(value = "xmlPrueba", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
+    public xmlResultadoMedicamento medicamentosXmlPrueba(@RequestBody xmlConsultaMedicamento medicamento) throws SQLException {
+        
+        
+        return servicio.consultaMedicamento(medicamento);
+    }
+    
 
 }
