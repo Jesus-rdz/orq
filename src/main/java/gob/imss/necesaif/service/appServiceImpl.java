@@ -1,18 +1,21 @@
 package gob.imss.necesaif.service;
 
+import gob.imss.necesaif.data.dao.DAOFarmacia;
 import gob.imss.necesaif.integration.constants.Constantes;
-import gob.imss.necesaif.integration.repository.DAORuteo;
-import gob.imss.necesaif.model.*;
-import gob.imss.necesaif.utils.utilityArray;
+import gob.imss.necesaif.model.altaTratamiento.AltaTratamientoEntrada;
+import gob.imss.necesaif.model.altaTratamiento.AltaTratamientoSalida;
+import gob.imss.necesaif.model.cancelaMedicamento.CancelaTratamientoEntrada;
+import gob.imss.necesaif.model.cancelaMedicamento.CancelaTratamientoSalida;
+import gob.imss.necesaif.model.cancelaMedicamento.Receta;
+import gob.imss.necesaif.model.cancelaMedicamento.Tratamiento;
+import gob.imss.necesaif.model.consultaMedicamento.ConsultaMedicamentoEntrada;
+import gob.imss.necesaif.model.consultaMedicamento.ConsultaMedicamentoSalida;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Service;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class appServiceImpl implements appService {
@@ -20,88 +23,87 @@ public class appServiceImpl implements appService {
     private final static Logger logger = Logger.getLogger(appServiceImpl.class);
 
     @Autowired
-    private DAORuteo daoRuteo;
+    private DAOFarmacia daoFarmacia;
 
     @Override
-    public xmlResultadoMedicamento consultaMedicamento(xmlConsultaMedicamento input) throws SQLException {
-        Connection con = null;
-        int iLenght = 0;
-        xmlResultadoMedicamento resultadoMedicamento = new xmlResultadoMedicamento();
-        RuteoDto farmaciaLocal = new RuteoDto();
+    public ConsultaMedicamentoSalida consultaMedicamento(ConsultaMedicamentoEntrada entrada) {
+        ConsultaMedicamentoSalida salida = new ConsultaMedicamentoSalida();
         try {
-            farmaciaLocal = daoRuteo.obtenerDatosConexion(input.getClasificacionPresupuestalSolicitante(), input.getClasificacionPresupuestalFarmacia());
-            //Conexion a la nueva local
-            
-            DriverManagerDataSource dataSource = new DriverManagerDataSource();
-            dataSource.setDriverClassName(farmaciaLocal.getDriverClass());
-            dataSource.setUrl(farmaciaLocal.getUrl());
-            dataSource.setUsername(farmaciaLocal.getUsername());
-            dataSource.setPassword(farmaciaLocal.getPassword());
-            
-            con = dataSource.getConnection();
+            salida = daoFarmacia.exeConsultaMedicamento(entrada);
+        } catch (Exception e){
+            e.printStackTrace();
+            salida.setMensaje(Constantes.ERR_CNXDB[1]);
+            salida.setEstatus(Constantes.ERR_CNXDB[0]);
+        }
+        return salida;
+    }
 
-
-
-            logger.info("Conexion realizada a Farmacia local: " + farmaciaLocal.getUrl());
-            if(farmaciaLocal != null) {
-                //ConsultaMedicamento sp
-                CallableStatement call = con.prepareCall("{call SP_SIMF_CONSULTA(?, ?, ?)}");
-                call.setString("@pClasPtal", input.getClasificacionPresupuestalFarmacia());
-                call.setString("@pMedicamento", input.getDescripcionArticulo());
-                call.setString("@pNivAtencion", String.valueOf(input.getNivelAtencion()));
-                ResultSet rs = call.executeQuery();
-                logger.info("StoreProcedure 'SP_SIMF_CONSULTA' ejecutado.");
-
-                Detalles_Art detalles_art = new Detalles_Art();
-                Detalles detalle[] = new Detalles[0];
-                while (rs.next()) {
-                    iLenght = detalle.length;
-                    utilityArray utilityArray = null;
-                    detalle = (Detalles[]) utilityArray.resizeArray(detalle, iLenght + 1);
-                    detalle[iLenght] = new Detalles();
-                    detalle[iLenght].setUnidadMedida(rs.getString("UNIDAD"));
-                    detalle[iLenght].setGpo(rs.getString("GPO"));
-                    detalle[iLenght].setGen(rs.getString("GEN"));
-                    detalle[iLenght].setEsp(rs.getString("ESP"));
-                    detalle[iLenght].setDif(rs.getString("DIF"));
-                    detalle[iLenght].setVar(rs.getString("VAR"));
-                    detalle[iLenght].setBasico(rs.getString("BASICO"));
-                    detalle[iLenght].setForma(rs.getString("FORMA"));
-                    detalle[iLenght].setUnidadMedida(rs.getString("UNI_MED"));
-                    detalle[iLenght].setTipoPresentacion(rs.getString("TIPO_PRES"));
-                    detalle[iLenght].setCantidadPresentacion(rs.getFloat("CANT_PRES"));
-                    detalle[iLenght].setConcentracion(rs.getInt("CONCENTRACION"));
-                    detalle[iLenght].setNivelServicio(rs.getInt("NIVELSERVICIO"));
-                    detalle[iLenght].setDescArticulo(rs.getString("DESCRIPCION"));
-                    detalle[iLenght].setInventarioDisponible(rs.getInt("INV_DISP"));
-                    detalle[iLenght].setPresRazonada(rs.getInt("PRES_RAZONADA"));
-                    detalle[iLenght].setMedicamentoGen(rs.getInt("IC_MEDICAMENTO_GEN"));
+    @Override
+    public AltaTratamientoSalida altaTratamiento(AltaTratamientoEntrada entrada) {
+        AltaTratamientoSalida salida = new AltaTratamientoSalida();
+        try{
+            salida = daoFarmacia.exeAltaTratamiento(entrada);
+            salida.setClasificacionPresupuestal(entrada.getClasificacionPresupuestalFarmacia());
+            if(salida.getEstatus().equals(Constantes.ERR_ACTUALIZARSP[0])){
+                // si error De actualizacion SP
+                try{
+                    CancelaTratamientoEntrada cancelaTratamientoEntrada = new CancelaTratamientoEntrada();
+                    cancelaTratamientoEntrada.setClasificacionPresupuestal(entrada.getClasificacionPresupuestalSolicitante());
+                    cancelaTratamientoEntrada.setClasificacionPresupuestalFarmacia(entrada.getClasificacionPresupuestalFarmacia());
+                    cancelaTratamientoEntrada.setNumeroReceta(entrada.getTratamiento().get(0).getReceta().get(0).getNumeroDocumento());
+                    //borrar por Tratamiento para que se eliminen todas las recetas
+                    CancelaTratamientoSalida CancelaTratamientoSalida = new CancelaTratamientoSalida();
+                    CancelaTratamientoSalida = daoFarmacia.exeCancelaTratamiento(0, cancelaTratamientoEntrada);
+                    salida.setEstatus(CancelaTratamientoSalida.getEstatus());
+                    salida.setMensaje(CancelaTratamientoSalida.getMensaje());
+                } catch (Exception ex){
+                    ex.getStackTrace();
+                    salida.setEstatus(Constantes.ERR_EXECSP[0]);
+                    salida.setMensaje(Constantes.ERR_EXECSP[1]);
                 }
-
-                /*validacion de detalle*/
-                if (detalle.length == 0) {
-                    resultadoMedicamento.setEstatus(Constantes.NOHAYDATOS[0]);
-                    resultadoMedicamento.setMensaje(Constantes.NOHAYDATOS[1]);
-                } else {
-                    resultadoMedicamento.setClavePresupuestal(input.getClasificacionPresupuestalFarmacia());
-                    detalles_art.setDetalles(detalle);
-                    resultadoMedicamento.setDetalles_art(detalles_art);
-                    resultadoMedicamento.setEstatus(Constantes.PROC_EXITO[0]);
-                    resultadoMedicamento.setMensaje(Constantes.PROC_EXITO[1]);
-                }
-                /*Cierra conexion a Farmacia Local*/
-                rs.close();
-            } else {
-                resultadoMedicamento.setMensaje(Constantes.ERR_NOINFRUTEO[1]);
-                resultadoMedicamento.setEstatus(Constantes.ERR_NOINFRUTEO[0]);
             }
         } catch (Exception e){
             e.printStackTrace();
-            resultadoMedicamento.setMensaje(Constantes.ERR_CNXDB[1]);
-            resultadoMedicamento.setEstatus(Constantes.ERR_CNXDB[0]);
+            salida.setEstatus(Constantes.ERR_CNXDB[0]);
+            salida.setMensaje(Constantes.ERR_CNXDB[1]);
         }
-        return resultadoMedicamento;
+        return salida;
     }
 
+    @Override
+    public CancelaTratamientoSalida cancelaTratamiento(CancelaTratamientoEntrada entrada) {
+        CancelaTratamientoSalida salida = new CancelaTratamientoSalida();
+        logger.info("Servicio Cancela Tratamiento");
+        List<Tratamiento> listTratamiento = new ArrayList<>();
+        Tratamiento tratamiento = new Tratamiento();
+        try {
+            if(entrada.getNumeroReceta().length() > 0){
+                logger.info("Cancela por receta.");
+                salida = daoFarmacia.exeCancelaTratamiento(1, entrada);
+                List<Receta> listReceta = new ArrayList<>();
+                Receta receta = new Receta();
+                receta.setEstatusReceta(salida.getEstatus());
+                receta.setMensajeReceta(salida.getMensaje());
+                receta.setNumeroDocumento(entrada.getNumeroReceta());
+                listReceta.add(receta);
+                tratamiento.setReceta(listReceta);
+            } else if (entrada.getTratamiento().length() > 0) {
+                logger.info("Cancela por tratamiento.");
+                salida = daoFarmacia.exeCancelaTratamiento(0, entrada);
+                tratamiento.setEstatusTratamiento(salida.getEstatus());
+                tratamiento.setNumeroTratamiento(entrada.getTratamiento());
+                listTratamiento.add(tratamiento);
+                salida.setTratamiento(listTratamiento);
+            } else {
+                salida.setEstatus(Constantes.ERR_NOTRATRECETA[0]);
+                salida.setMensaje(Constantes.ERR_NOTRATRECETA[1]);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            salida.setEstatus(Constantes.ERR_CNXDB[0]);
+            salida.setMensaje(Constantes.ERR_CNXDB[1]);
+        }
+        return salida;
+    }
 
 }

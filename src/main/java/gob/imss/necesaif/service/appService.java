@@ -1,13 +1,16 @@
 package gob.imss.necesaif.service;
 
-import gob.imss.necesaif.model.RuteoDto;
-import gob.imss.necesaif.model.xmlConsultaMedicamento;
-import gob.imss.necesaif.model.xmlResultadoMedicamento;
+import gob.imss.necesaif.model.altaTratamiento.AltaTratamientoEntrada;
+import gob.imss.necesaif.model.altaTratamiento.AltaTratamientoSalida;
+import gob.imss.necesaif.model.cancelaMedicamento.CancelaTratamientoEntrada;
+import gob.imss.necesaif.model.cancelaMedicamento.CancelaTratamientoSalida;
+import gob.imss.necesaif.model.consultaMedicamento.ConsultaMedicamentoEntrada;
+import gob.imss.necesaif.model.consultaMedicamento.ConsultaMedicamentoSalida;
 import org.springframework.stereotype.Service;
-
-import java.sql.SQLException;
 
 @Service
 public interface appService {
-    xmlResultadoMedicamento consultaMedicamento(xmlConsultaMedicamento xmlConsultaMedicamento) throws SQLException; 
+    ConsultaMedicamentoSalida consultaMedicamento(ConsultaMedicamentoEntrada entrada);
+    AltaTratamientoSalida altaTratamiento(AltaTratamientoEntrada entrada);
+    CancelaTratamientoSalida cancelaTratamiento(CancelaTratamientoEntrada entrada);
 }

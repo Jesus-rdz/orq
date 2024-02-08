@@ -1,20 +1,24 @@
-package gob.imss.necesaif.model;
+package gob.imss.necesaif.model.consultaMedicamento;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
-public class xmlConsultaMedicamento {
-	@XmlAttribute(name="clasificacion-presupuestal-farmacia")
-	private String clasificacionPresupuestalFarmacia; 
+@JacksonXmlRootElement(localName = "consulta-medicamento-entrada")
+public class ConsultaMedicamentoEntrada {
+	@JacksonXmlProperty(localName = "clasificacion-presupuestal-farmacia")
+	private String clasificacionPresupuestalFarmacia;
+	@JacksonXmlProperty(localName = "clasificacion-presupuestal-solicitante")
 	private String clasificacionPresupuestalSolicitante;
+	@JacksonXmlProperty(localName = "descripcion-articulo")
 	private String descripcionArticulo;
+	@JacksonXmlProperty(localName = "nivel-atencion")
 	private Integer nivelAtencion;
 
 	public String getClasificacionPresupuestalFarmacia() {
 		return clasificacionPresupuestalFarmacia;
 	}
 
-	public void setClasificacionPresupuestalFarmacia(
-			String clasificacionPresupuestalFarmacia) {
+	public void setClasificacionPresupuestalFarmacia(String clasificacionPresupuestalFarmacia) {
 		this.clasificacionPresupuestalFarmacia = clasificacionPresupuestalFarmacia;
 	}
 
@@ -43,13 +47,14 @@ public class xmlConsultaMedicamento {
 		this.nivelAtencion = nivelAtencion;
 	}
 
-	public xmlConsultaMedicamento(String clasificacionPresupuestalFarmacia,
-			String clasificacionPresupuestalSolicitante,
-			String descripcionArticulo, Integer nivelAtencion) {
+	public ConsultaMedicamentoEntrada(String clasificacionPresupuestalFarmacia,
+                                      String clasificacionPresupuestalSolicitante,
+                                      String descripcionArticulo, Integer nivelAtencion) {
 		super();
 		this.clasificacionPresupuestalFarmacia = clasificacionPresupuestalFarmacia;
 		this.clasificacionPresupuestalSolicitante = clasificacionPresupuestalSolicitante;
 		this.descripcionArticulo = descripcionArticulo;
 		this.nivelAtencion = nivelAtencion;
 	}
+
 }

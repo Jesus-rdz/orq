@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -44,9 +46,19 @@ public class DAORuteoImpl implements DAORuteo {
                         return ruteoDto;
                     });
         } catch (IncorrectResultSizeDataAccessException exp) {
-            logger.debug("Conexi�n no encontrada. " + exp.getMessage());
+            logger.debug("Conexión no encontrada. " + exp.getMessage());
         }
         logger.info(ruteo.getUrl());
         return ruteo;
+    }
+
+    @Override
+    public Connection conexionConFarmacia(RuteoDto farmaciaLocal) throws SQLException {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(farmaciaLocal.getDriverClass());
+        dataSource.setUrl(farmaciaLocal.getUrl());
+        dataSource.setUsername(farmaciaLocal.getUsername());
+        dataSource.setPassword(farmaciaLocal.getPassword());
+        return dataSource.getConnection();
     }
 }
